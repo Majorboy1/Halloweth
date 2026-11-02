@@ -1,7 +1,12 @@
 #include "PluginProcessor.h"
 
 #include "AudioEngine/SampleLoader.h"
+#include "AudioEngine/SfzInstrument.h"
 #include "PluginEditor.h"
+
+#if JUCE_WINDOWS
+ #include <windows.h>
+#endif
 
 namespace afronova
 {
@@ -29,12 +34,57 @@ namespace
         param::fxCompOn, param::fxCompThreshold, param::fxCompRatio, param::fxCompMakeup,
         param::fxWidthOn, param::fxWidthAmount
     };
+
+    juce::File getPluginModuleFile()
+    {
+       #if JUCE_WINDOWS
+        HMODULE module = nullptr;
+        const auto address = reinterpret_cast<LPCWSTR> (&getPluginModuleFile);
+
+        if (GetModuleHandleExW (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+                                    | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                                address, &module))
+        {
+            wchar_t path[32768] {};
+            const auto length = GetModuleFileNameW (module, path, (DWORD) std::size (path));
+
+            if (length > 0 && length < std::size (path))
+                return juce::File (juce::String (path, (size_t) length));
+        }
+       #endif
+
+        return juce::File::getSpecialLocation (juce::File::currentApplicationFile);
+    }
+
+    juce::File resolveBundledInstrument (const juce::String& instrumentPath)
+    {
+        constexpr auto prefix = "@HALLOWETH_RESOURCE:";
+
+        if (! instrumentPath.startsWith (prefix))
+            return juce::File (instrumentPath);
+
+        const auto relativePath = instrumentPath.substring ((int) std::char_traits<char>::length (prefix));
+        const auto moduleFolder = getPluginModuleFile().getParentDirectory();
+        const juce::File candidates[]
+        {
+            moduleFolder.getChildFile ("Resources").getChildFile (relativePath),
+            moduleFolder.getParentDirectory().getChildFile ("Resources").getChildFile (relativePath)
+        };
+
+        for (const auto& candidate : candidates)
+            if (candidate.existsAsFile())
+                return candidate;
+
+        return candidates[0];
+    }
 }
 
 AfronovaAudioProcessor::AfronovaAudioProcessor()
     : AudioProcessor (BusesProperties().withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
       apvts (*this, nullptr, "AFRONOVA_STATE", createParameterLayout())
 {
+    sfzEngine = std::make_unique<SfzEngine>();
+
     masterGainParam  = apvts.getRawParameterValue (param::masterGain);
     toneParam        = apvts.getRawParameterValue (param::tone);
     attackParam      = apvts.getRawParameterValue (param::attack);
@@ -107,7 +157,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AfronovaAudioProcessor::crea
 
     layout.add (std::make_unique<AudioParameterChoice> (
         ParameterID { param::engineMode, 1 }, "Engine",
-        StringArray { "Sample Map", "Synth Engine", "Drums" }, 1));
+        StringArray { "Sample Map", "Synth Engine", "Drums", "SFZ" }, 1));
 
     layout.add (std::make_unique<AudioParameterChoice> (
         ParameterID { param::synthWave, 1 }, "Waveform",
@@ -184,6 +234,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AfronovaAudioProcessor::crea
 void AfronovaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     audioEngine.prepare (sampleRate, samplesPerBlock);
+    sfzEngine->prepare (sampleRate, samplesPerBlock);
     effects.prepare (sampleRate, samplesPerBlock);
     keyboardState.reset();
 
@@ -204,6 +255,7 @@ void AfronovaAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 void AfronovaAudioProcessor::releaseResources()
 {
     audioEngine.reset();
+    sfzEngine->allSoundsOff();
     effects.reset();
     activeVoices.store (0, std::memory_order_relaxed);
 }
@@ -250,7 +302,11 @@ void AfronovaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
                                          sustainParam->load() * 0.01f,
                                          releaseParam->load() * 0.001f });
     audioEngine.setLoopEnabled (loopParam->load() > 0.5f);
-    audioEngine.setEngineMode (juce::roundToInt (engineModeParam->load()));
+    const auto selectedEngineMode = juce::roundToInt (engineModeParam->load());
+    const auto sfzReady = selectedEngineMode == (int) EngineMode::sfz && sfzEngine->hasInstrument();
+    audioEngine.setEngineMode (selectedEngineMode == (int) EngineMode::sfz && ! sfzReady
+                                   ? (int) EngineMode::synth
+                                   : selectedEngineMode);
 
     {
         SynthSettings synth;
@@ -266,7 +322,10 @@ void AfronovaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         audioEngine.setSynthSettings (synth);
     }
 
-    audioEngine.render (buffer, midiMessages);
+    if (sfzReady)
+        sfzEngine->render (buffer, midiMessages);
+    else
+        audioEngine.render (buffer, midiMessages);
 
     const auto requestedTone = toneParam->load();
 
@@ -332,7 +391,9 @@ void AfronovaAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
             channelPointers[ch][i] *= gain;
     }
 
-    activeVoices.store (audioEngine.getActiveVoiceCount(), std::memory_order_relaxed);
+    activeVoices.store (sfzReady ? sfzEngine->getActiveVoiceCount()
+                                 : audioEngine.getActiveVoiceCount(),
+                        std::memory_order_relaxed);
 
     float peak = 0.0f;
 
@@ -358,12 +419,23 @@ int AfronovaAudioProcessor::findPresetByName (const juce::String& name) const no
     return -1;
 }
 
+int AfronovaAudioProcessor::getSfzNumRegions() const noexcept
+{
+    return sfzEngine != nullptr ? sfzEngine->getNumRegions() : 0;
+}
+
 void AfronovaAudioProcessor::loadInstrumentForPreset (const PresetLoadResult& result)
 {
     if (result.instrumentPath.isEmpty())
         return;
 
-    const juce::File file (result.instrumentPath);
+    if (result.instrumentIsSfz)
+    {
+        loadSfzFileAsync (juce::File (result.instrumentPath));
+        return;
+    }
+
+    const auto file = resolveBundledInstrument (result.instrumentPath);
 
     if (! file.existsAsFile())
     {
@@ -424,12 +496,14 @@ void AfronovaAudioProcessor::saveCurrentAsPreset (const juce::String& name,
                                                   const juce::String& genre,
                                                   const juce::String& description)
 {
-    const auto instrumentPath = loadedInstrument != nullptr ? loadedInstrument->sourcePath
-                                                            : juce::String();
+    const auto isSfz = loadedSfzFile.existsAsFile();
+    const auto instrumentPath = isSfz ? loadedSfzFile.getFullPathName()
+                                     : loadedInstrument != nullptr ? loadedInstrument->sourcePath
+                                                                   : juce::String();
     const auto isMap = instrumentPath.endsWithIgnoreCase (".json");
 
     if (presetManager.saveUserPreset (name, category, genre, description, false, apvts,
-                                      instrumentPath, isMap))
+                                      instrumentPath, isMap, isSfz))
     {
         const auto index = findPresetByName (name.trim());
 
@@ -473,6 +547,17 @@ void AfronovaAudioProcessor::startLoad (std::shared_ptr<InstrumentLoadJob> job)
             case InstrumentLoadJob::Kind::map:
                 instrument = InstrumentLoader::loadMapFile (job->file, error);
                 break;
+
+            case InstrumentLoadJob::Kind::sfz:
+            {
+                auto sfzInstrument = SfzInstrument::loadFromFile (job->file, job->sampleRate,
+                                                                  job->maximumBlockSize, error);
+
+                if (sfzInstrument != nullptr)
+                    job->sfzResult = std::shared_ptr<SfzInstrument> (std::move (sfzInstrument));
+
+                break;
+            }
 
             case InstrumentLoadJob::Kind::drumKit:
             {
@@ -535,6 +620,16 @@ void AfronovaAudioProcessor::loadSampleMapAsync (const juce::File& mapFile)
     auto job = std::make_shared<InstrumentLoadJob>();
     job->kind = InstrumentLoadJob::Kind::map;
     job->file = mapFile;
+    startLoad (job);
+}
+
+void AfronovaAudioProcessor::loadSfzFileAsync (const juce::File& sfzFile)
+{
+    auto job = std::make_shared<InstrumentLoadJob>();
+    job->kind = InstrumentLoadJob::Kind::sfz;
+    job->file = sfzFile;
+    job->sampleRate = getSampleRate() > 0.0 ? getSampleRate() : 44100.0;
+    job->maximumBlockSize = juce::jmax (512, getBlockSize());
     startLoad (job);
 }
 
@@ -627,7 +722,9 @@ void AfronovaAudioProcessor::applyAllPadAdjustments()
 void AfronovaAudioProcessor::clearSample()
 {
     audioEngine.clearInstrument();
+    sfzEngine->clear();
     loadedInstrument.reset();
+    loadedSfzFile = {};
     pendingJob.reset();
 
     sampleStatus = "No instrument loaded";
@@ -661,7 +758,8 @@ void AfronovaAudioProcessor::publishDrumKit (const DrumKit& kit,
     }
 
     if (auto* modeParameter = apvts.getParameter (param::engineMode))
-        modeParameter->setValueNotifyingHost (1.0f);   // last choice = Drums
+        modeParameter->setValueNotifyingHost (
+            modeParameter->convertTo0to1 ((float) EngineMode::drums));
 
     drumKitRevision.fetch_add (1, std::memory_order_relaxed);
 }
@@ -685,8 +783,35 @@ void AfronovaAudioProcessor::pollSampleLoad()
         return;
     }
 
+    if (job->kind == InstrumentLoadJob::Kind::sfz)
+    {
+        if (job->sfzResult != nullptr)
+        {
+            audioEngine.clearInstrument();
+            loadedInstrument.reset();
+            loadedSfzFile = job->file;
+            sfzEngine->install (std::move (job->sfzResult));
+            sampleStatus = "Loaded SFZ (" + juce::String (sfzEngine->getNumRegions()) + " regions)";
+            sampleError.clear();
+
+            if (auto* modeParameter = apvts.getParameter (param::engineMode))
+                modeParameter->setValueNotifyingHost (
+                    modeParameter->convertTo0to1 ((float) EngineMode::sfz));
+        }
+        else
+        {
+            sampleStatus = "SFZ load failed";
+            sampleError = job->error.isNotEmpty() ? job->error : juce::String ("Unknown SFZ error");
+        }
+
+        sampleRevision.fetch_add (1, std::memory_order_relaxed);
+        return;
+    }
+
     if (job->result != nullptr)
     {
+        sfzEngine->clear();
+        loadedSfzFile = {};
         loadedInstrument = job->result;
         audioEngine.setInstrument (job->result);
 
@@ -721,6 +846,16 @@ void AfronovaAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
         state.setProperty ("instrumentIsMap",
                            loadedInstrument->sourcePath.endsWithIgnoreCase (".json"), nullptr);
     }
+    else
+    {
+        state.removeProperty ("instrumentPath", nullptr);
+        state.removeProperty ("instrumentIsMap", nullptr);
+    }
+
+    if (loadedSfzFile.existsAsFile())
+        state.setProperty ("sfzPath", loadedSfzFile.getFullPathName(), nullptr);
+    else
+        state.removeProperty ("sfzPath", nullptr);
 
     if (! drumKit.isEmpty())
         state.setProperty ("drumKit", drumKit.toJson(), nullptr);
@@ -752,8 +887,22 @@ void AfronovaAudioProcessor::setStateInformation (const void* data, int sizeInBy
 
     const auto instrumentPath = tree.getProperty ("instrumentPath", juce::var()).toString();
     const auto isMap = (bool) tree.getProperty ("instrumentIsMap", false);
+    const auto sfzPath = tree.getProperty ("sfzPath", juce::var()).toString();
 
-    if (instrumentPath.isEmpty())
+    if (sfzPath.isNotEmpty())
+    {
+        const juce::File file (sfzPath);
+
+        if (file.existsAsFile())
+            loadSfzFileAsync (file);
+        else
+        {
+            sampleStatus = "Missing SFZ instrument";
+            sampleError = sfzPath + " was not found";
+            sampleRevision.fetch_add (1, std::memory_order_relaxed);
+        }
+    }
+    else if (instrumentPath.isEmpty())
     {
         clearSample();
     }

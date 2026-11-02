@@ -1,8 +1,8 @@
-# Installs AFRONOVA with the plugin data on D: while FL Studio still finds it.
+# Installs Halloweth with the plugin data on D: while FL Studio still finds it.
 #
 # How it works:
-#   - The real bundle lives at  D:\VST3\AFRONOVA.vst3
-#   - C:\Program Files\Common Files\VST3\AFRONOVA.vst3 becomes a directory
+#   - The real bundle lives at  D:\VST3\HALLOWETH.vst3
+#   - C:\Program Files\Common Files\VST3\HALLOWETH.vst3 becomes a directory
 #     JUNCTION pointing at it, so FL Studio's scanner sees the plugin in the
 #     shared folder while the files stay on D:
 #
@@ -37,7 +37,7 @@ if ($flStudio) {
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $source = Join-Path $projectRoot ("build-" + $Config.ToLowerInvariant() +
-                                  "\AFRONOVA_artefacts\$Config\VST3\AFRONOVA.vst3")
+                                  "\AFRONOVA_artefacts\$Config\VST3\HALLOWETH.vst3")
 
 if (-not (Test-Path $source)) {
     Write-Host "VST3 bundle not found:" -ForegroundColor Red
@@ -47,8 +47,8 @@ if (-not (Test-Path $source)) {
 }
 
 $dataFolder = "D:\VST3"
-$dataPath   = Join-Path $dataFolder "AFRONOVA.vst3"
-$sharedPath = "C:\Program Files\Common Files\VST3\AFRONOVA.vst3"
+$dataPath   = Join-Path $dataFolder "HALLOWETH.vst3"
+$sharedPath = "C:\Program Files\Common Files\VST3\HALLOWETH.vst3"
 
 # ---- 1. Put the real bundle on D: -------------------------------------------
 if (-not (Test-Path $dataFolder)) {
@@ -84,7 +84,7 @@ if (Test-Path $sharedPath) {
 New-Item -ItemType Junction -Path $sharedPath -Target $dataPath | Out-Null
 
 # ---- 3. Verify --------------------------------------------------------------
-$binary = Join-Path $sharedPath "Contents\x86_64-win\AFRONOVA.vst3"
+$binary = Join-Path $sharedPath "Contents\x86_64-win\HALLOWETH.vst3"
 
 if (-not (Test-Path $binary)) {
     Write-Host "Something went wrong: the junction does not resolve to the plugin." -ForegroundColor Red
@@ -103,4 +103,4 @@ Write-Host ""
 Write-Host "FL Studio:" -ForegroundColor Cyan
 Write-Host "  1. Start FL Studio"
 Write-Host "  2. Options > Manage plugins > Find installed plugins"
-Write-Host "  3. AFRONOVA stays available; updates only replace files on D:"
+Write-Host "  3. Halloweth appears in the plugin list; future updates replace files on D:"

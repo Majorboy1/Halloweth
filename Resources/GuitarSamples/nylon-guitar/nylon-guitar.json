@@ -1,0 +1,411 @@
+{
+    "zones":  [
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  42,
+                      "keyLow":  40,
+                      "velLow":  1,
+                      "rootNote":  40,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel01Finger_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  42,
+                      "keyLow":  40,
+                      "velLow":  49,
+                      "rootNote":  40,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel02Pick_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  42,
+                      "keyLow":  40,
+                      "velLow":  97,
+                      "rootNote":  40,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel03Pick_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  45,
+                      "keyLow":  42,
+                      "velLow":  1,
+                      "rootNote":  43,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel01Finger_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  45,
+                      "keyLow":  42,
+                      "velLow":  49,
+                      "rootNote":  43,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel02Pick_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  45,
+                      "keyLow":  42,
+                      "velLow":  97,
+                      "rootNote":  43,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringLowE_Vel03Pick_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  48,
+                      "keyLow":  45,
+                      "velLow":  1,
+                      "rootNote":  46,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel01Finger_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  48,
+                      "keyLow":  45,
+                      "velLow":  49,
+                      "rootNote":  46,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel02Pick_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  48,
+                      "keyLow":  45,
+                      "velLow":  97,
+                      "rootNote":  46,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel03Pick_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  51,
+                      "keyLow":  48,
+                      "velLow":  1,
+                      "rootNote":  49,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel01Finger_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  51,
+                      "keyLow":  48,
+                      "velLow":  49,
+                      "rootNote":  49,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel02Pick_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  51,
+                      "keyLow":  48,
+                      "velLow":  97,
+                      "rootNote":  49,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringA_Vel03Pick_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  54,
+                      "keyLow":  51,
+                      "velLow":  1,
+                      "rootNote":  52,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringD_Vel01Finger_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  54,
+                      "keyLow":  51,
+                      "velLow":  49,
+                      "rootNote":  52,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringD_Vel02Pick_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  54,
+                      "keyLow":  51,
+                      "velLow":  97,
+                      "rootNote":  52,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringD_Vel03Pick_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  57,
+                      "keyLow":  54,
+                      "velLow":  1,
+                      "rootNote":  55,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel01Finger_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  57,
+                      "keyLow":  54,
+                      "velLow":  49,
+                      "rootNote":  55,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel02Pick_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  57,
+                      "keyLow":  54,
+                      "velLow":  97,
+                      "rootNote":  55,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel03Pick_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  60,
+                      "keyLow":  57,
+                      "velLow":  1,
+                      "rootNote":  58,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel01Finger_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  60,
+                      "keyLow":  57,
+                      "velLow":  49,
+                      "rootNote":  58,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel02Pick_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  60,
+                      "keyLow":  57,
+                      "velLow":  97,
+                      "rootNote":  58,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringG_Vel03Pick_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  63,
+                      "keyLow":  60,
+                      "velLow":  1,
+                      "rootNote":  61,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringB_Vel01Finger_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  63,
+                      "keyLow":  60,
+                      "velLow":  49,
+                      "rootNote":  61,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringB_Vel02Pick_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  63,
+                      "keyLow":  60,
+                      "velLow":  97,
+                      "rootNote":  61,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringB_Vel03Pick_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  66,
+                      "keyLow":  63,
+                      "velLow":  1,
+                      "rootNote":  64,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  66,
+                      "keyLow":  63,
+                      "velLow":  49,
+                      "rootNote":  64,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  66,
+                      "keyLow":  63,
+                      "velLow":  97,
+                      "rootNote":  64,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  69,
+                      "keyLow":  66,
+                      "velLow":  1,
+                      "rootNote":  67,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  69,
+                      "keyLow":  66,
+                      "velLow":  49,
+                      "rootNote":  67,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  69,
+                      "keyLow":  66,
+                      "velLow":  97,
+                      "rootNote":  67,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  72,
+                      "keyLow":  69,
+                      "velLow":  1,
+                      "rootNote":  70,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  72,
+                      "keyLow":  69,
+                      "velLow":  49,
+                      "rootNote":  70,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  72,
+                      "keyLow":  69,
+                      "velLow":  97,
+                      "rootNote":  70,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  75,
+                      "keyLow":  72,
+                      "velLow":  1,
+                      "rootNote":  73,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  75,
+                      "keyLow":  72,
+                      "velLow":  49,
+                      "rootNote":  73,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  75,
+                      "keyLow":  72,
+                      "velLow":  97,
+                      "rootNote":  73,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  78,
+                      "keyLow":  75,
+                      "velLow":  1,
+                      "rootNote":  76,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  78,
+                      "keyLow":  75,
+                      "velLow":  49,
+                      "rootNote":  76,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  78,
+                      "keyLow":  75,
+                      "velLow":  97,
+                      "rootNote":  76,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  81,
+                      "keyLow":  78,
+                      "velLow":  1,
+                      "rootNote":  79,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  81,
+                      "keyLow":  78,
+                      "velLow":  49,
+                      "rootNote":  79,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  81,
+                      "keyLow":  78,
+                      "velLow":  97,
+                      "rootNote":  79,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  83,
+                      "keyLow":  81,
+                      "velLow":  1,
+                      "rootNote":  82,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel01Finger_As5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  83,
+                      "keyLow":  81,
+                      "velLow":  49,
+                      "rootNote":  82,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel02Pick_As5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  83,
+                      "keyLow":  81,
+                      "velLow":  97,
+                      "rootNote":  82,
+                      "file":  "meta-nylon-guitar/ogg/INSGuitarNylon_StringHighE_Vel03Pick_As5_01.ogg"
+                  }
+              ],
+    "category":  "Guitars",
+    "name":  "Halloweth Nylon Guitar"
+}

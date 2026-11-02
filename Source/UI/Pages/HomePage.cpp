@@ -79,13 +79,13 @@ void HomePage::paint (juce::Graphics& g)
 
         g.setColour (theme::text);
         g.setFont (theme::boldFont (22.0f));
-        g.drawText ("AFRICAN MUSIC PRODUCTION INSTRUMENT",
+        g.drawText ("HALLOWETH",
                     area.removeFromTop (28), juce::Justification::centredLeft, false);
 
         g.setColour (theme::textDim);
         g.setFont (theme::font (11.0f));
-        g.drawFittedText ("Phase 3: multisample maps and the two-oscillator synth engine are live. "
-                          "Switch engines and load instruments on the INSTRUMENTS page.",
+        g.drawFittedText ("African music production instrument. Play recorded guitars, load SFZ libraries, "
+                  "or build a sound with the synth engine.",
                           area, juce::Justification::topLeft, 2);
     }
 
@@ -124,14 +124,14 @@ void HomePage::paint (juce::Graphics& g)
 
         const Row rows[]
         {
-            { "Plugin shell & UI",            "done",    theme::success },
-            { "MIDI, polyphony, pitch bend",  "done",    theme::success },
-            { "Sample engine (WAV/AIFF)",     "done",    theme::success },
-            { "Multisample maps + synth",     "done",    theme::success },
-            { "Drum engine & pads",           "next",    theme::pending },
-            { "Effects engine",              "phase 4", theme::textFaint },
-            { "Presets & sample library",    "phase 5", theme::textFaint },
-            { "Polish & release build",      "phase 6", theme::textFaint }
+            { "Sample maps + synth",          "READY",   theme::success },
+            { "SFZ instrument engine",         "READY",   theme::success },
+            { "Recorded guitar library",       "CC0",     theme::success },
+            { "16-pad drum engine",            "READY",   theme::success },
+            { "MIDI, pitch bend, polyphony",   "READY",   theme::success },
+            { "Seven built-in effects",        "READY",   theme::success },
+            { "Preset and favorites library",  "READY",   theme::success },
+            { "Vocal library",                 "PLANNED", theme::pending }
         };
 
         auto area = statusBounds.reduced (18, 0).withTrimmedTop (36).withTrimmedBottom (14);

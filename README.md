@@ -6,8 +6,9 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 > multisample maps, drum kit, synth design, and a **rich Halloweth factory bank with guitar,
 > piano, saxophone, percussion and drum presets** are implemented and being refined.
 >
-> **Vocal chops and the remaining effects do not exist yet.** No audio recordings ship with
-> this project — instrument presets play files you supply.
+> **Vocal chops and the remaining effects do not exist yet.** The factory bank includes
+> compact, CC0 nylon- and steel-string guitar recordings; other sample-based instruments
+> still require audio you supply.
 > See [Roadmap](#roadmap).
 
 ---
@@ -21,18 +22,22 @@ Cinematic hybrid synth and premium world-instrument platform — VST3 for Window
 | MIDI input, 16-voice polyphony, pitch bend, per-voice ADSR | implemented |
 | Sample playback: WAV/AIFF/FLAC/OGG, pitch tracking, looping | implemented |
 | Multisample maps: key ranges, velocity layers, round robin, one-shot | implemented |
+| SFZ instruments: sfizz, async loading, MIDI events, block rendering, state recall | implemented; tested with a basic SFZ map |
 | 16-pad drum kit: per-pad level, pan, tuning, one-shot, kit JSON save/load | implemented |
 | Two-oscillator synth: PolyBLEP saw/square, sine, triangle, TPT filter | implemented |
 | Synth sound design: filter envelope, LFO, sub oscillator, stereo spread | implemented |
-| Engine switching (sample map / synth / drums) | implemented |
+| Engine switching (sample map / synth / drums / SFZ) | implemented |
 | Effects: reverb, delay, chorus, LP/HP filter, drive, compressor, stereo width | implemented |
 | Preset browser: search, category/genre filters, favourites, save/delete, import/export | implemented |
 | 50 factory presets across pads, keys, bass, plucks, leads, textures, drums | implemented |
 | Asynchronous instrument loading, missing-file reporting | implemented |
 | Save/restore state, including instrument and drum kit | implemented |
 | Dark interface: navigation, preset strip, engine/drum/effect pages, keyboard, meters | implemented |
-| Automated engine tests | implemented, 79 checks passing |
+| Automated engine tests | implemented, 102 checks passing |
 | Preset browser, vocal chops, remaining effects (phaser, flanger, EQ, transient) | **not implemented** |
+
+See [Architecture](docs/architecture.md) for the current engine boundaries, the Salamander
+Piano evaluation, licensing notes and the proposed SFZ integration path.
 
 Nothing in the interface is decorative: every control is connected to a real parameter,
 and sections that are not built show an explicit "not implemented yet" page instead of
@@ -44,7 +49,7 @@ fake knobs.
 - Visual Studio 2022 Build Tools with the **Desktop development with C++** workload
   (JUCE 8 does not support MinGW)
 - CMake 3.22 or newer
-- Git (only to fetch JUCE)
+- Git (to fetch JUCE and initialize the pinned sfizz submodule)
 
 This machine is currently set up with:
 
@@ -53,7 +58,8 @@ This machine is currently set up with:
 | VS 2022 Build Tools | `D:\devtools\vs2022bt` |
 | CMake 3.31.8 | `D:\devtools\afronova\cmake\bin\cmake.exe` |
 | Ninja 1.13.1 | `D:\devtools\afronova\ninja\ninja.exe` |
-| JUCE 8.0.8 | `ThirdParty\JUCE` (git clone, commit `d6181bd`) |
+| JUCE 8.0.8 | CMake FetchContent cache at `build-release\_deps\juce-src` |
+| sfizz | `ThirdParty\sfizz` submodule, pinned at `3993b5c` |
 
 ## 3. Build
 
@@ -66,8 +72,8 @@ This machine is currently set up with:
 Output:
 
 ```
-build-release\AFRONOVA_artefacts\Release\VST3\AFRONOVA.vst3
-build-release\AFRONOVA_artefacts\Release\Standalone\AFRONOVA.exe
+build-release\AFRONOVA_artefacts\Release\VST3\HALLOWETH.vst3
+build-release\AFRONOVA_artefacts\Release\Standalone\HALLOWETH.exe
 ```
 
 Manual equivalent:
@@ -92,7 +98,7 @@ produces audio, both channels carry signal, voice/peak readouts, chord polyphony
 release back to silence, patch parameter application, preset wrap-around, favourites,
 state save/restore, and correct operation after a sample-rate/buffer-size change.
 
-Latest run: **88/88 passed** (engine, MIDI, presets, preset files, state, synth pitch and
+Latest run: **102/102 passed** (engine, MIDI, presets, preset files, state, synth pitch and
 sound design, map JSON, zone selection, round robin, multisample pitch, one-shot/loop,
 file I/O, async loads, drum kit, and every effect's behaviour).
 
@@ -102,19 +108,19 @@ file I/O, async loads, drum kit, and every effect's behaviour).
 so the installer keeps the plugin data on `D:` and links it into the shared folder:
 
 ```
-D:\VST3\AFRONOVA.vst3                                   <- real files
-C:\Program Files\Common Files\VST3\AFRONOVA.vst3        <- junction to the above
+D:\VST3\HALLOWETH.vst3                                   <- real files
+C:\Program Files\Common Files\VST3\HALLOWETH.vst3        <- junction to the above
 ```
 
 Close FL Studio, then double-click `scripts\install-vst3-system.cmd` and click **Yes**
 on the administrator prompt. It:
 
-1. copies the bundle to `D:\VST3\AFRONOVA.vst3`
+1. copies the bundle to `D:\VST3\HALLOWETH.vst3`
 2. replaces the shared-folder entry with a junction to it
 3. verifies the plugin binary resolves through the junction
 
 Then start FL Studio → **Options → Manage plugins → Find installed plugins**.
-AFRONOVA appears under **Generators → VST3**.
+HALLOWETH appears under **Generators → VST3**.
 
 Because the files live on `D:`, later builds only need `scripts\build.ps1` plus a re-run of
 the installer to update.
@@ -216,15 +222,19 @@ Factory presets live in code; user presets are JSON files in
 
 ## 9. Sample content and licensing
 
-AFRONOVA ships **no third-party recordings**. The finished instruments are intended to
-play audio you supply through the sample import system — legally owned and licensed
-WAV/AIFF files. No Omnisphere or other proprietary sample content is copied, extracted or
-redistributed by this project.
+The factory guitar presets use a compact subset of Meta Open Sound nylon- and steel-string
+recordings, licensed CC0 1.0; source license texts and maps are in
+`Resources/GuitarSamples/`. The SFZ engine uses the BSD-2-Clause sfizz library; licenses
+for sfizz and its linked dependencies are included under `Resources/Licenses/` and copied
+into plugin/app resources at build time. Loading an SFZ does not bundle its samples.
+Other factory instrument categories are synthesis patches or require user-supplied audio.
+No Omnisphere or other proprietary sample content is copied, extracted or redistributed.
 
 ## 10. Known limitations of the current build
 
-- **No audio recordings ship with this project.** Every instrument plays files you load.
-  `Resources/SampleMaps/example-multisample.json` is a documented template.
+- **Only the two acoustic guitar banks ship as recordings.** Piano, drums and other
+  multisample instruments need user-supplied audio; `Resources/SampleMaps/example-multisample.json`
+  is a documented template.
 - Effects run as one serial master chain; there is no per-instrument routing yet.
 - Implemented effects: reverb, delay, chorus, low/high-pass filter, drive, compressor,
   stereo width. Phaser, flanger, EQ, transient shaping, stutter and reverse are not built.

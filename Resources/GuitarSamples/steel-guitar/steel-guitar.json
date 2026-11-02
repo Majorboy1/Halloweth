@@ -1,0 +1,411 @@
+{
+    "zones":  [
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  41,
+                      "keyLow":  40,
+                      "velLow":  1,
+                      "rootNote":  40,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel01_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  41,
+                      "keyLow":  40,
+                      "velLow":  49,
+                      "rootNote":  40,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel02_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  41,
+                      "keyLow":  40,
+                      "velLow":  97,
+                      "rootNote":  40,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel03_E2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  44,
+                      "keyLow":  42,
+                      "velLow":  1,
+                      "rootNote":  43,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel01_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  44,
+                      "keyLow":  42,
+                      "velLow":  49,
+                      "rootNote":  43,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel02_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  44,
+                      "keyLow":  42,
+                      "velLow":  97,
+                      "rootNote":  43,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringLowE_Vel03_G2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  47,
+                      "keyLow":  45,
+                      "velLow":  1,
+                      "rootNote":  46,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel01_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  47,
+                      "keyLow":  45,
+                      "velLow":  49,
+                      "rootNote":  46,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel02_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  47,
+                      "keyLow":  45,
+                      "velLow":  97,
+                      "rootNote":  46,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel03_As2_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  50,
+                      "keyLow":  48,
+                      "velLow":  1,
+                      "rootNote":  49,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel01_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  50,
+                      "keyLow":  48,
+                      "velLow":  49,
+                      "rootNote":  49,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel02_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  50,
+                      "keyLow":  48,
+                      "velLow":  97,
+                      "rootNote":  49,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringA_Vel03_Cs3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  53,
+                      "keyLow":  51,
+                      "velLow":  1,
+                      "rootNote":  52,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringD_Vel01_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  53,
+                      "keyLow":  51,
+                      "velLow":  49,
+                      "rootNote":  52,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringD_Vel02_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  53,
+                      "keyLow":  51,
+                      "velLow":  97,
+                      "rootNote":  52,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringD_Vel03_E3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  56,
+                      "keyLow":  54,
+                      "velLow":  1,
+                      "rootNote":  55,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel01_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  56,
+                      "keyLow":  54,
+                      "velLow":  49,
+                      "rootNote":  55,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel02_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  56,
+                      "keyLow":  54,
+                      "velLow":  97,
+                      "rootNote":  55,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel03_G3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  59,
+                      "keyLow":  57,
+                      "velLow":  1,
+                      "rootNote":  58,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel01_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  59,
+                      "keyLow":  57,
+                      "velLow":  49,
+                      "rootNote":  58,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel02_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  59,
+                      "keyLow":  57,
+                      "velLow":  97,
+                      "rootNote":  58,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringG_Vel03_As3_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  62,
+                      "keyLow":  60,
+                      "velLow":  1,
+                      "rootNote":  61,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringB_Vel01_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  62,
+                      "keyLow":  60,
+                      "velLow":  49,
+                      "rootNote":  61,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringB_Vel02_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  62,
+                      "keyLow":  60,
+                      "velLow":  97,
+                      "rootNote":  61,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringB_Vel03_Cs4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  65,
+                      "keyLow":  63,
+                      "velLow":  1,
+                      "rootNote":  64,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  65,
+                      "keyLow":  63,
+                      "velLow":  49,
+                      "rootNote":  64,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  65,
+                      "keyLow":  63,
+                      "velLow":  97,
+                      "rootNote":  64,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_E4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  68,
+                      "keyLow":  66,
+                      "velLow":  1,
+                      "rootNote":  67,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  68,
+                      "keyLow":  66,
+                      "velLow":  49,
+                      "rootNote":  67,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  68,
+                      "keyLow":  66,
+                      "velLow":  97,
+                      "rootNote":  67,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_G4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  71,
+                      "keyLow":  69,
+                      "velLow":  1,
+                      "rootNote":  70,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  71,
+                      "keyLow":  69,
+                      "velLow":  49,
+                      "rootNote":  70,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  71,
+                      "keyLow":  69,
+                      "velLow":  97,
+                      "rootNote":  70,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_As4_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  74,
+                      "keyLow":  72,
+                      "velLow":  1,
+                      "rootNote":  73,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  74,
+                      "keyLow":  72,
+                      "velLow":  49,
+                      "rootNote":  73,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  74,
+                      "keyLow":  72,
+                      "velLow":  97,
+                      "rootNote":  73,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_Cs5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  77,
+                      "keyLow":  75,
+                      "velLow":  1,
+                      "rootNote":  76,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  77,
+                      "keyLow":  75,
+                      "velLow":  49,
+                      "rootNote":  76,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  77,
+                      "keyLow":  75,
+                      "velLow":  97,
+                      "rootNote":  76,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_E5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  80,
+                      "keyLow":  78,
+                      "velLow":  1,
+                      "rootNote":  79,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  80,
+                      "keyLow":  78,
+                      "velLow":  49,
+                      "rootNote":  79,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  80,
+                      "keyLow":  78,
+                      "velLow":  97,
+                      "rootNote":  79,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_G5_01.ogg"
+                  },
+                  {
+                      "velHigh":  48,
+                      "oneShot":  true,
+                      "keyHigh":  84,
+                      "keyLow":  81,
+                      "velLow":  1,
+                      "rootNote":  82,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel01_As5_01.ogg"
+                  },
+                  {
+                      "velHigh":  96,
+                      "oneShot":  true,
+                      "keyHigh":  84,
+                      "keyLow":  81,
+                      "velLow":  49,
+                      "rootNote":  82,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel02_As5_01.ogg"
+                  },
+                  {
+                      "velHigh":  127,
+                      "oneShot":  true,
+                      "keyHigh":  84,
+                      "keyLow":  81,
+                      "velLow":  97,
+                      "rootNote":  82,
+                      "file":  "meta-steel-guitar/ogg/INSGuitarSteel_StringHighE_Vel03_As5_01.ogg"
+                  }
+              ],
+    "category":  "Guitars",
+    "name":  "Halloweth Steel Guitar"
+}

@@ -18,6 +18,31 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $buildDir = Join-Path $projectRoot ("build-" + $Config.ToLowerInvariant())
+$sfizzDir = Join-Path $projectRoot "ThirdParty\sfizz"
+
+$git = Get-Command git -ErrorAction SilentlyContinue
+
+if (-not $git) {
+    throw "Git is required to initialize the pinned sfizz submodule."
+}
+
+if (-not (Test-Path (Join-Path $sfizzDir "CMakeLists.txt"))) {
+    & $git.Source -C $projectRoot submodule update --init -- ThirdParty/sfizz
+    if ($LASTEXITCODE -ne 0) { throw "Could not initialize ThirdParty/sfizz." }
+}
+
+$sfizzDependencies = @(
+    "external/abseil-cpp",
+    "external/filesystem",
+    "external/invoke.hpp",
+    "external/simde",
+    "external/st_audiofile/thirdparty/dr_libs",
+    "external/st_audiofile/thirdparty/libaiff",
+    "external/st_audiofile/thirdparty/wavpack"
+)
+
+& $git.Source -C $sfizzDir submodule update --init -- $sfizzDependencies
+if ($LASTEXITCODE -ne 0) { throw "Could not initialize sfizz build dependencies." }
 
 function Resolve-CMake {
     $candidates = @(
@@ -53,5 +78,5 @@ if ($LASTEXITCODE -ne 0) { throw "Build failed." }
 $artefacts = Join-Path $buildDir "AFRONOVA_artefacts\$Config"
 Write-Host ""
 Write-Host "Build succeeded." -ForegroundColor Green
-Write-Host "  VST3:       $artefacts\VST3\AFRONOVA.vst3"
-Write-Host "  Standalone: $artefacts\Standalone\AFRONOVA.exe"
+Write-Host "  VST3:       $artefacts\VST3\HALLOWETH.vst3"
+Write-Host "  Standalone: $artefacts\Standalone\HALLOWETH.exe"

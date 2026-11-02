@@ -16,6 +16,9 @@
 
 namespace afronova
 {
+class SfzEngine;
+class SfzInstrument;
+
 /**
     AFRONOVA audio processor.
 
@@ -77,6 +80,7 @@ public:
     /** Melodic instruments - message thread only. */
     void loadSampleFileAsync (const juce::File& file);   // single sample, full range
     void loadSampleMapAsync (const juce::File& mapFile); // JSON multisample map
+    void loadSfzFileAsync (const juce::File& sfzFile);
     void clearSample();
 
     std::shared_ptr<const LoadedInstrument> getLoadedInstrument() const { return loadedInstrument; }
@@ -84,6 +88,8 @@ public:
     juce::String getSampleErrorText() const  { return sampleError; }
     int getSampleRevision() const noexcept   { return sampleRevision.load (std::memory_order_relaxed); }
     bool isSampleLoading() const noexcept    { return pendingJob != nullptr; }
+    juce::String getSfzFilePath() const      { return loadedSfzFile.getFullPathName(); }
+    int getSfzNumRegions() const noexcept;
 
     //==============================================================================
     /** Drum kit - message thread only. */
@@ -104,6 +110,7 @@ public:
 
     //==============================================================================
     AudioEngine audioEngine;
+    std::unique_ptr<SfzEngine> sfzEngine;
     PresetManager presetManager;
     juce::AudioProcessorValueTreeState apvts;
     juce::MidiKeyboardState keyboardState;
@@ -111,17 +118,20 @@ public:
 private:
     struct InstrumentLoadJob
     {
-        enum class Kind { singleSample, map, drumKit, drumPad, drumKitJson };
+        enum class Kind { singleSample, map, sfz, drumKit, drumPad, drumKitJson };
 
         Kind kind = Kind::singleSample;
         juce::File file;
         juce::String jsonText;
         int padIndex = -1;
+        double sampleRate = 44100.0;
+        int maximumBlockSize = 512;
         DrumKit kit;
         bool activateDrums = false;
 
         std::atomic<bool> finished { false };
         std::shared_ptr<const LoadedInstrument> result;
+        std::shared_ptr<SfzInstrument> sfzResult;
         juce::String error;
     };
 
@@ -169,6 +179,7 @@ private:
     // Loading state (message thread owns these; the worker only touches its job).
     std::shared_ptr<InstrumentLoadJob> pendingJob;
     std::shared_ptr<const LoadedInstrument> loadedInstrument;
+    juce::File loadedSfzFile;
 
     juce::String sampleStatus { "No instrument loaded" };
     juce::String sampleError;

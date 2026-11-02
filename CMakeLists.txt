@@ -30,6 +30,18 @@ else()
     FetchContent_MakeAvailable(JUCE)
 endif()
 
+# Use sfizz for SFZ instruments without initializing its optional test/tools
+# submodules during a normal Halloweth configure.
+set(SFIZZ_JACK OFF CACHE BOOL "" FORCE)
+set(SFIZZ_RENDER OFF CACHE BOOL "" FORCE)
+set(SFIZZ_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(SFIZZ_TESTS OFF CACHE BOOL "" FORCE)
+set(SFIZZ_DEMOS OFF CACHE BOOL "" FORCE)
+set(SFIZZ_DEVTOOLS OFF CACHE BOOL "" FORCE)
+set(SFIZZ_SHARED OFF CACHE BOOL "" FORCE)
+set(SFIZZ_GIT_SUBMODULE_CHECK OFF CACHE BOOL "" FORCE)
+add_subdirectory(ThirdParty/sfizz EXCLUDE_FROM_ALL)
+
 # ------------------------------------------------------------------------------
 # Plugin target
 # ------------------------------------------------------------------------------
@@ -53,6 +65,7 @@ target_sources(AFRONOVA PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp
     Source/AudioEngine/AudioEngine.cpp
+    Source/AudioEngine/SfzInstrument.cpp
     Source/AudioEngine/SynthVoice.cpp
     Source/AudioEngine/SampleVoice.cpp
     Source/AudioEngine/SampleLoader.cpp
@@ -88,6 +101,7 @@ target_link_libraries(AFRONOVA
         juce::juce_audio_utils
         juce::juce_audio_formats
         juce::juce_dsp
+        sfizz::static
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags)
@@ -105,6 +119,22 @@ if (MSVC)
     # /utf-8 keeps the non-ASCII separators used in UI strings intact.
     target_compile_options(AFRONOVA PRIVATE /MP /permissive- /utf-8)
 endif()
+
+add_custom_command(TARGET AFRONOVA_VST3 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
+        "$<TARGET_FILE_DIR:AFRONOVA_VST3>/../Resources/GuitarSamples"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
+        "$<TARGET_FILE_DIR:AFRONOVA_VST3>/../Resources/Licenses")
+
+add_custom_command(TARGET AFRONOVA_Standalone POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
+        "$<TARGET_FILE_DIR:AFRONOVA_Standalone>/Resources/GuitarSamples"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
+        "$<TARGET_FILE_DIR:AFRONOVA_Standalone>/Resources/Licenses")
 
 # ------------------------------------------------------------------------------
 # Automated tests
@@ -126,6 +156,14 @@ if (AFRONOVA_BUILD_TESTS)
             juce::juce_dsp
         PUBLIC
             juce::juce_recommended_config_flags)
+
+    add_custom_command(TARGET AFRONOVA_Tests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/Resources/GuitarSamples"
+            "$<TARGET_FILE_DIR:AFRONOVA_Tests>/Resources/GuitarSamples"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Licenses"
+            "$<TARGET_FILE_DIR:AFRONOVA_Tests>/Resources/Licenses")
 
     add_test(NAME AudioEngine COMMAND AFRONOVA_Tests)
 endif()

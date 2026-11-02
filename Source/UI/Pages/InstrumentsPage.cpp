@@ -10,25 +10,43 @@ InstrumentsPage::InstrumentsPage (AfronovaAudioProcessor& p) : processor (p)
 {
     // ---- engine selector -----------------------------------------------------
     engineSampleButton.setButtonText ("SAMPLE MAP");
+    engineSampleButton.setTooltip ("Play a WAV/AIFF sample or a JSON multisample map");
     engineSampleButton.setRadioGroupId (5150);
     engineSampleButton.onClick = [this] { setEngineMode (0); };
     addAndMakeVisible (engineSampleButton);
 
     engineSynthButton.setButtonText ("SYNTH ENGINE");
+    engineSynthButton.setTooltip ("Use Halloweth's built-in oscillator synth");
     engineSynthButton.setRadioGroupId (5150);
     engineSynthButton.onClick = [this] { setEngineMode (1); };
     addAndMakeVisible (engineSynthButton);
 
+    engineSfzButton.setButtonText ("SFZ / PIANO");
+    engineSfzButton.setTooltip ("Select the SFZ instrument engine");
+    engineSfzButton.setRadioGroupId (5150);
+    engineSfzButton.onClick = [this] { setEngineMode (3); };
+    addAndMakeVisible (engineSfzButton);
+
     // ---- sample map card -----------------------------------------------------
     loadFileButton.setButtonText ("LOAD SAMPLE");
+    loadFileButton.setTooltip ("Load a single WAV, AIFF, FLAC or OGG sample");
     loadFileButton.onClick = [this] { chooseSampleFile(); };
     addAndMakeVisible (loadFileButton);
 
     loadMapButton.setButtonText ("LOAD MAP");
+    loadMapButton.setTooltip ("Load a Halloweth JSON multisample map");
     loadMapButton.onClick = [this] { chooseMapFile(); };
     addAndMakeVisible (loadMapButton);
 
+    loadSfzButton.setButtonText ("LOAD SFZ");
+    loadSfzButton.setTooltip ("Load an SFZ definition and its relative sample files");
+    loadSfzButton.setColour (juce::TextButton::buttonColourId, theme::accentDeep);
+    loadSfzButton.setColour (juce::TextButton::textColourOffId, theme::text);
+    loadSfzButton.onClick = [this] { chooseSfzFile(); };
+    addAndMakeVisible (loadSfzButton);
+
     clearButton.setButtonText ("CLEAR");
+    clearButton.setTooltip ("Unload the current sample or SFZ instrument");
     clearButton.onClick = [this]
     {
         processor.clearSample();
@@ -37,6 +55,7 @@ InstrumentsPage::InstrumentsPage (AfronovaAudioProcessor& p) : processor (p)
     addAndMakeVisible (clearButton);
 
     loopButton.setButtonText ("LOOP");
+    loopButton.setTooltip ("Loop mapped samples that contain loop points");
     loopButton.setClickingTogglesState (true);
     addAndMakeVisible (loopButton);
 
@@ -97,8 +116,6 @@ InstrumentsPage::~InstrumentsPage() = default;
 
 void InstrumentsPage::setEngineMode (int mode)
 {
-    // engineMode is a 3-choice parameter (0 sample map, 1 synth, 2 drums), so the
-    // value must be converted - sending 1.0 directly would select the last choice.
     if (auto* parameter = processor.apvts.getParameter (param::engineMode))
         parameter->setValueNotifyingHost (parameter->convertTo0to1 ((float) mode));
 
@@ -147,6 +164,28 @@ void InstrumentsPage::chooseMapFile()
                               });
 }
 
+void InstrumentsPage::chooseSfzFile()
+{
+    fileChooser = std::make_unique<juce::FileChooser> (
+        "Load an SFZ instrument",
+        juce::File::getSpecialLocation (juce::File::userMusicDirectory),
+        "*.sfz");
+
+    fileChooser->launchAsync (juce::FileBrowserComponent::openMode
+                                  | juce::FileBrowserComponent::canSelectFiles,
+                              [this] (const juce::FileChooser& chooser)
+                              {
+                                  const auto file = chooser.getResult();
+
+                                  if (file.existsAsFile())
+                                  {
+                                      processor.loadSfzFileAsync (file);
+                                      setEngineMode (3);
+                                      refresh();
+                                  }
+                              });
+}
+
 void InstrumentsPage::pollProcessor()
 {
     const auto mode = processor.apvts.getRawParameterValue (param::engineMode) != nullptr
@@ -155,10 +194,13 @@ void InstrumentsPage::pollProcessor()
 
     engineSampleButton.setToggleState (mode < 0.5f, juce::dontSendNotification);
     engineSynthButton.setToggleState (mode >= 0.5f && mode < 1.5f, juce::dontSendNotification);
+    engineSfzButton.setToggleState (mode >= 2.5f, juce::dontSendNotification);
 
     juce::String status;
 
-    if (mode >= 1.5f)
+    if (mode >= 2.5f)
+        status = processor.getSfzFilePath().isNotEmpty() ? "SFZ ENGINE ACTIVE" : "SFZ SELECTED - NO FILE";
+    else if (mode >= 1.5f)
         status = "DRUM ENGINE ACTIVE";
     else if (mode >= 0.5f)
         status = "SYNTH ENGINE ACTIVE";
@@ -194,6 +236,13 @@ void InstrumentsPage::refresh()
 
         detailsLabel.setText (details, juce::dontSendNotification);
     }
+    else if (processor.getSfzFilePath().isNotEmpty())
+    {
+        nameLabel.setText ("SFZ Instrument", juce::dontSendNotification);
+        detailsLabel.setText (juce::String (processor.getSfzNumRegions()) + " regions  ·  "
+                                  + juce::File (processor.getSfzFilePath()).getFileName(),
+                              juce::dontSendNotification);
+    }
     else
     {
         nameLabel.setText ("No instrument loaded", juce::dontSendNotification);
@@ -224,9 +273,11 @@ void InstrumentsPage::resized()
 
     auto headerInner = headerBounds.reduced (2, 4);
     headerInner.removeFromLeft (62);   // leaves room for the ENGINE caption
-    engineSampleButton.setBounds (headerInner.removeFromLeft (130));
+    engineSampleButton.setBounds (headerInner.removeFromLeft (112));
     headerInner.removeFromLeft (8);
-    engineSynthButton.setBounds (headerInner.removeFromLeft (130));
+    engineSynthButton.setBounds (headerInner.removeFromLeft (112));
+    headerInner.removeFromLeft (8);
+    engineSfzButton.setBounds (headerInner.removeFromLeft (110));
 
     auto leftColumn = area.removeFromLeft (juce::jmax (300, area.getWidth() * 55 / 100));
     area.removeFromLeft (10);
@@ -243,14 +294,21 @@ void InstrumentsPage::resized()
         inner.removeFromTop (4);
         statusLabel.setBounds (inner.removeFromTop (20));
 
-        auto buttons = inner.removeFromBottom (34);
-        loadFileButton.setBounds (buttons.removeFromLeft (112));
-        buttons.removeFromLeft (8);
-        loadMapButton.setBounds (buttons.removeFromLeft (100));
-        buttons.removeFromLeft (8);
-        clearButton.setBounds (buttons.removeFromLeft (76));
-        buttons.removeFromLeft (8);
-        loopButton.setBounds (buttons.removeFromLeft (76));
+        auto controls = inner.removeFromBottom (34);
+        inner.removeFromBottom (6);
+        auto loadButtons = inner.removeFromBottom (34);
+        const auto loadButtonGap = 6;
+        const auto loadButtonWidth = (loadButtons.getWidth() - loadButtonGap * 2) / 3;
+        loadFileButton.setBounds (loadButtons.removeFromLeft (loadButtonWidth));
+        loadButtons.removeFromLeft (loadButtonGap);
+        loadMapButton.setBounds (loadButtons.removeFromLeft (loadButtonWidth));
+        loadButtons.removeFromLeft (loadButtonGap);
+        loadSfzButton.setBounds (loadButtons);
+
+        const auto controlWidth = (controls.getWidth() - 8) / 2;
+        clearButton.setBounds (controls.removeFromLeft (controlWidth));
+        controls.removeFromLeft (8);
+        loopButton.setBounds (controls);
     }
 
     // Synth card internals
@@ -306,14 +364,14 @@ void InstrumentsPage::paint (juce::Graphics& g)
         g.drawText ("ENGINE", area.removeFromLeft (60),
                     juce::Justification::centredLeft, false);
 
-        area.removeFromLeft (268);
+        area.removeFromLeft (350);
 
         g.setColour (engineStatusText.startsWith ("NO SAMPLE") ? theme::pending : theme::textDim);
         g.setFont (theme::boldFont (10.0f));
         g.drawFittedText (engineStatusText, area, juce::Justification::centredLeft, 1);
     }
 
-    theme::drawCard (g, sampleBounds, "SAMPLE MAP  ·  WAV / AIFF / JSON");
+    theme::drawCard (g, sampleBounds, "SAMPLE MAP / SFZ  ·  WAV / AIFF / JSON / SFZ");
 
     if (processor.getLoadedInstrument() == nullptr)
     {

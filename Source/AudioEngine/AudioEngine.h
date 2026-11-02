@@ -15,7 +15,8 @@ enum class EngineMode
 {
     sampleMap = 0,
     synth = 1,
-    drums = 2
+    drums = 2,
+    sfz = 3
 };
 
 /** Complete synth patch state, published as one snapshot per block. */

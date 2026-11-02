@@ -8,11 +8,7 @@ namespace afronova
 class AfronovaAudioProcessor;
 class LabeledKnob;
 
-/** Instruments page.
-
-    Two engines are available and both are real:
-    - SAMPLE MAP: loads a WAV/AIFF (single zone) or a JSON multisample map.
-    - SYNTH ENGINE: two-oscillator subtractive synth with filter.
+/** Instruments page for the sample-map, SFZ and synth engines.
 
     Every control acts on the running engine. */
 class InstrumentsPage : public juce::Component
@@ -30,6 +26,7 @@ public:
 private:
     void chooseSampleFile();
     void chooseMapFile();
+    void chooseSfzFile();
     void refresh();
     void setEngineMode (int mode);
 
@@ -38,8 +35,8 @@ private:
     juce::OwnedArray<LabeledKnob> envelopeKnobs;
     juce::OwnedArray<LabeledKnob> synthKnobs;
 
-    juce::TextButton engineSampleButton, engineSynthButton;
-    juce::TextButton loadFileButton, loadMapButton, clearButton, loopButton;
+    juce::TextButton engineSampleButton, engineSynthButton, engineSfzButton;
+    juce::TextButton loadFileButton, loadMapButton, loadSfzButton, clearButton, loopButton;
     juce::ComboBox waveCombo;
 
     juce::Label nameLabel, detailsLabel, statusLabel;

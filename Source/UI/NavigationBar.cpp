@@ -74,7 +74,7 @@ void NavigationBar::paint (juce::Graphics& g)
     auto logoArea = bounds.removeFromTop (logoHeight).reduced (22, 20);
     g.setColour (theme::accentBright);
     g.setFont (theme::boldFont (22.0f));
-    g.drawText ("AFRONOVA", logoArea.removeFromTop (28), juce::Justification::centredLeft, false);
+    g.drawText ("HALLOWETH", logoArea.removeFromTop (28), juce::Justification::centredLeft, false);
 
     g.setColour (theme::accent);
     g.fillRoundedRectangle (juce::Rectangle<float> ((float) logoArea.getX(),
@@ -83,7 +83,7 @@ void NavigationBar::paint (juce::Graphics& g)
 
     g.setColour (theme::textFaint);
     g.setFont (theme::font (10.0f));
-    g.drawText ("AFRICAN MUSIC INSTRUMENT", logoArea.withTrimmedTop (16),
+    g.drawText ("AFRICAN MUSIC STUDIO", logoArea.withTrimmedTop (16),
                 juce::Justification::topLeft, false);
 
     // Footer
@@ -91,7 +91,7 @@ void NavigationBar::paint (juce::Graphics& g)
 
     g.setColour (theme::textFaint);
     g.setFont (theme::font (10.0f));
-    g.drawText ("v0.1.0  ·  PHASE 1", footer, juce::Justification::bottomLeft, false);
+    g.drawText ("WINDOWS  ·  VST3", footer, juce::Justification::bottomLeft, false);
 }
 
 void NavigationBar::resized()

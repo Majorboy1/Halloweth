@@ -214,6 +214,34 @@ int main()
     const auto guitarPreset = processor.findPresetByName ("Velvet Nylon Guitar");
     check (guitarPreset >= 0, "guitar palette is available");
 
+    processor.applyPreset (guitarPreset);
+    const auto guitarMode = processor.apvts.getRawParameterValue (afronova::param::engineMode)->load();
+    check (std::abs (guitarMode) < 0.01f, "guitar preset selects the recorded sample engine");
+
+    for (int attempt = 0; attempt < 300 && processor.getLoadedInstrument() == nullptr; ++attempt)
+    {
+        juce::Thread::sleep (10);
+        processor.pollSampleLoad();
+    }
+
+    const auto guitarInstrument = processor.getLoadedInstrument();
+    check (guitarInstrument != nullptr && guitarInstrument->getNumPlayableZones() >= 45,
+           "factory guitar preset loads its multisampled recordings");
+
+    if (guitarInstrument != nullptr)
+    {
+        const auto* guitarZone = guitarInstrument->selectZone (60, 90, 0);
+        check (guitarZone != nullptr && guitarZone->zone.file.endsWithIgnoreCase (".ogg"),
+               "guitar preset selects an original recorded audio sample");
+
+         midi.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 100), 0);
+         renderBlock (processor, buffer, midi);
+         check (buffer.getMagnitude (0, 0, blockSize) > 0.001f,
+             "recorded guitar sample produces audio in the plugin engine");
+         midi.addEvent (juce::MidiMessage::allNotesOff (1), 0);
+         renderBlock (processor, buffer, midi);
+    }
+
     processor.applyPreset (0);   // Warm Pad: triangle wave, 2200 Hz cutoff
     check (processor.getCurrentPresetIndex() == 0, "current preset index updates");
 
@@ -528,6 +556,77 @@ int main()
         const auto broken = afronova::InstrumentLoader::loadMapFile (brokenMap, brokenError);
         check (broken == nullptr && brokenError.isNotEmpty(), "map with no readable zones fails cleanly");
 
+        folder.deleteRecursively();
+    }
+
+    // ---------------------------------------------------------------- SFZ engine
+    {
+        auto folder = juce::File::getSpecialLocation (juce::File::tempDirectory)
+                          .getChildFile ("halloweth_sfz_tests");
+        folder.deleteRecursively();
+        folder.createDirectory();
+        const auto samplesFolder = folder.getChildFile ("Samples");
+        samplesFolder.createDirectory();
+
+        const auto sampleFile = samplesFolder.getChildFile ("middleC.wav");
+        check (writeWav (sampleFile, 440.0f, sampleRate, 1.0), "SFZ test sample written");
+
+        const auto sfzFile = folder.getChildFile ("test.sfz");
+        sfzFile.replaceWithText (
+            "<control>\n"
+            "default_path=Samples/\n"
+            "<region> key=69 pitch_keycenter=69 sample=middleC.wav\n");
+
+        processor.clearSample();
+        processor.loadSfzFileAsync (sfzFile);
+
+        for (int attempt = 0; attempt < 300 && processor.getSfzFilePath().isEmpty(); ++attempt)
+        {
+            juce::Thread::sleep (10);
+            processor.pollSampleLoad();
+        }
+
+        check (processor.getSfzFilePath() == sfzFile.getFullPathName(), "SFZ loads asynchronously");
+        check (processor.getSfzNumRegions() == 1, "SFZ region is parsed by sfizz");
+
+        setChoice (afronova::param::engineMode, 3);
+        midi.addEvent (juce::MidiMessage::noteOn (1, 69, (juce::uint8) 100), 0);
+        renderBlock (processor, buffer, midi);
+        check (buffer.getMagnitude (0, 0, blockSize) > 0.001f,
+               "SFZ note produces rendered audio");
+        midi.addEvent (juce::MidiMessage::noteOff (1, 69), 0);
+        renderBlock (processor, buffer, midi);
+
+        juce::MemoryBlock savedState;
+        processor.getStateInformation (savedState);
+
+        {
+            afronova::AfronovaAudioProcessor restored;
+            restored.setPlayConfigDetails (0, 2, sampleRate, blockSize);
+            restored.prepareToPlay (sampleRate, blockSize);
+            restored.setStateInformation (savedState.getData(), (int) savedState.getSize());
+
+            for (int attempt = 0; attempt < 300 && restored.getSfzFilePath().isEmpty(); ++attempt)
+            {
+                juce::Thread::sleep (10);
+                restored.pollSampleLoad();
+            }
+
+            check (restored.getSfzFilePath() == sfzFile.getFullPathName(),
+                   "SFZ file path restores from plugin state");
+
+                 restored.clearSample();
+                 juce::MemoryBlock clearedState;
+                 restored.getStateInformation (clearedState);
+
+                 afronova::AfronovaAudioProcessor cleared;
+                 cleared.setPlayConfigDetails (0, 2, sampleRate, blockSize);
+                 cleared.prepareToPlay (sampleRate, blockSize);
+                 cleared.setStateInformation (clearedState.getData(), (int) clearedState.getSize());
+                 check (cleared.getSfzFilePath().isEmpty(), "cleared SFZ path is removed from saved state");
+        }
+
+        processor.clearSample();
         folder.deleteRecursively();
     }
 

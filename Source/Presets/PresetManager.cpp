@@ -23,15 +23,23 @@ namespace
 
     juce::var makeFactoryData (const FactoryPresetDefinition& definition)
     {
+        const auto isGuitar = juce::String (definition.category) == "Guitars";
+        const auto guitarMap = juce::String (definition.name).contains ("Steel")
+                                   ? "steel-guitar/steel-guitar.json"
+                                   : "nylon-guitar/nylon-guitar.json";
+
         juce::DynamicObject::Ptr root (new juce::DynamicObject());
         root->setProperty ("name", definition.name);
         root->setProperty ("category", definition.category);
         root->setProperty ("genre", definition.genre);
         root->setProperty ("description", definition.description);
         root->setProperty ("needsSample", definition.needsSample);
-        root->setProperty ("engineMode", definition.engineMode);
-        root->setProperty ("instrumentPath", "");
-        root->setProperty ("instrumentIsMap", false);
+        root->setProperty ("engineMode", isGuitar ? 0 : definition.engineMode);
+        root->setProperty ("instrumentPath", isGuitar
+                              ? "@HALLOWETH_RESOURCE:GuitarSamples/" + juce::String (guitarMap)
+                              : juce::String());
+        root->setProperty ("instrumentIsMap", isGuitar);
+        root->setProperty ("instrumentIsSfz", false);
         root->setProperty ("isFactory", true);
 
         juce::DynamicObject::Ptr parameters (new juce::DynamicObject());
@@ -222,6 +230,7 @@ PresetLoadResult PresetManager::applyPreset (int index, juce::AudioProcessorValu
     result.engineMode = (int) data.getProperty ("engineMode", 1);
     result.instrumentPath = data.getProperty ("instrumentPath", juce::var()).toString();
     result.instrumentIsMap = (bool) data.getProperty ("instrumentIsMap", false);
+    result.instrumentIsSfz = (bool) data.getProperty ("instrumentIsSfz", false);
 
     if (auto* modeParameter = apvts.getParameter (param::engineMode))
         modeParameter->setValueNotifyingHost (modeParameter->convertTo0to1 ((float) result.engineMode));
@@ -236,7 +245,8 @@ bool PresetManager::saveUserPreset (const juce::String& name,
                                     bool needsSample,
                                     const juce::AudioProcessorValueTreeState& apvts,
                                     const juce::String& instrumentPath,
-                                    bool instrumentIsMap)
+                                    bool instrumentIsMap,
+                                    bool instrumentIsSfz)
 {
     if (name.trim().isEmpty())
         return false;
@@ -249,6 +259,7 @@ bool PresetManager::saveUserPreset (const juce::String& name,
     root->setProperty ("needsSample", needsSample);
     root->setProperty ("instrumentPath", instrumentPath);
     root->setProperty ("instrumentIsMap", instrumentIsMap);
+    root->setProperty ("instrumentIsSfz", instrumentIsSfz);
     root->setProperty ("isFactory", false);
 
     juce::DynamicObject::Ptr parameters (new juce::DynamicObject());

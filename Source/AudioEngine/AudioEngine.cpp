@@ -76,7 +76,7 @@ void AudioEngine::setLoopEnabled (bool shouldLoop) noexcept
 
 void AudioEngine::setEngineMode (int mode) noexcept
 {
-    engineMode.store (juce::jlimit (0, 2, mode), std::memory_order_relaxed);
+    engineMode.store (juce::jlimit (0, 3, mode), std::memory_order_relaxed);
 }
 
 bool AudioEngine::shouldUseSample() const noexcept

@@ -26,6 +26,7 @@ struct PresetLoadResult
 {
     juce::String instrumentPath;
     bool instrumentIsMap = false;
+    bool instrumentIsSfz = false;
     int engineMode = 1;
 };
 
@@ -60,7 +61,8 @@ public:
                          bool needsSample,
                          const juce::AudioProcessorValueTreeState& apvts,
                          const juce::String& instrumentPath,
-                         bool instrumentIsMap);
+                         bool instrumentIsMap,
+                         bool instrumentIsSfz);
 
     bool deleteUserPreset (int index);
 
