@@ -1,0 +1,17 @@
+build/
+build-*/
+cmake-build-*/
+ThirdParty/JUCE/
+_install/
+.env
+.env.*
+node_modules/
+package-lock.json
+package.json
+deepseek.js
+*.user
+*.vs
+.vscode/ipch/
+compile_commands.json
+.DS_Store
+Thumbs.db

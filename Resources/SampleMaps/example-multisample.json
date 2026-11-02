@@ -1,0 +1,17 @@
+{
+  "name": "Example Piano Map (template)",
+  "category": "Piano",
+  "zones": [
+    { "file": "samples/piano_C2_soft.wav", "keyLow": 36, "keyHigh": 47, "rootNote": 36, "velLow": 1,   "velHigh": 63,  "roundRobin": 0 },
+    { "file": "samples/piano_C2_soft_rr2.wav", "keyLow": 36, "keyHigh": 47, "rootNote": 36, "velLow": 1,  "velHigh": 63,  "roundRobin": 1 },
+    { "file": "samples/piano_C2_hard.wav", "keyLow": 36, "keyHigh": 47, "rootNote": 36, "velLow": 64,  "velHigh": 127, "roundRobin": 0 },
+
+    { "file": "samples/piano_C3_soft.wav", "keyLow": 48, "keyHigh": 59, "rootNote": 48, "velLow": 1,   "velHigh": 63 },
+    { "file": "samples/piano_C3_hard.wav", "keyLow": 48, "keyHigh": 59, "rootNote": 48, "velLow": 64,  "velHigh": 127 },
+
+    { "file": "samples/piano_C4_soft.wav", "keyLow": 60, "keyHigh": 71, "rootNote": 60, "velLow": 1,   "velHigh": 63 },
+    { "file": "samples/piano_C4_hard.wav", "keyLow": 60, "keyHigh": 71, "rootNote": 60, "velLow": 64,  "velHigh": 127 },
+
+    { "file": "samples/piano_C5.wav",      "keyLow": 72, "keyHigh": 83, "rootNote": 72, "velLow": 1,   "velHigh": 127 }
+  ]
+}
